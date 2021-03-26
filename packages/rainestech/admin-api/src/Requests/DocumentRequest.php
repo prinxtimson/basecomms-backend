@@ -8,34 +8,28 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Rainestech\AdminApi\Errors\FormValidationErrors;
 
-class StorageRequest extends FormRequest {
+class DocumentRequest extends FormRequest {
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules() {
-
         switch($this->method()) {
             case 'GET':
             case 'DELETE': {
                 return [];
             }
+            case 'PUT':
+            case 'PATCH':
             case 'POST': {
                 return [
-                    'id'    => 'integer|exists:file_storage,id',
-                    'name'  => 'required|between:3,250|string',
-                    'tag'  => 'required|string|between:3,100',
-                    'file'  => 'required',
-                ];
-            }
-            case 'PUT':
-            case 'PATCH': {
-                return [
-                    'id'    => 'integer|required|exists:file_storage,id',
+                    'id'    => 'integer|exists:admin_documents,id',
+                    'file.id'    => 'integer|required|exists:file_storage,id',
                     'name'  => 'required|between:3,100|string',
-                    'tag'  => 'required|string|between:3,100',
-                    'file'  => 'required',          ];
+                    'description'  => 'required|string|between:3,200',
+                    'private'  => 'required|boolean',
+                ];
             }
             default:{
                 return [];

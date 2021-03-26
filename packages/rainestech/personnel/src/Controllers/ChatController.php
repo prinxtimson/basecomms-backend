@@ -5,6 +5,7 @@ namespace Rainestech\Personnel\Controllers;
 
 use Rainestech\AdminApi\Controllers\BaseApiController;
 use Rainestech\AdminApi\Entity\Users;
+use Rainestech\Personnel\Entity\Channels;
 use Rainestech\Personnel\Entity\Friends;
 use Rainestech\Personnel\Requests\ChatFriendRequest;
 
@@ -18,7 +19,7 @@ class ChatController extends BaseApiController
             $data = new \stdClass();
             $data->id = $friend->friend->id;
             $data->name = $friend->friend->name;
-            $data->avatar = $friend->friend->passport ? $friend->friend->passport->link : '';
+            $data->avatar = $friend->friend->passport ? route('fs.get.file', ['file' => $friend->friend->passport->link]) : '';
 
             $resp[] = $data;
         }
@@ -37,18 +38,22 @@ class ChatController extends BaseApiController
 
     public function contacts() {
         $resp = [];
-        foreach (Users::all() as $friend) {
-            $data = new \stdClass();
-            $data->id = $friend->id;
-            $data->name = $friend->name;
-            $data->avatar = $friend->passport ? $friend->friend->passport->link : '';
+        $userId = auth('api')->id();
+        $channels = Channels::whereHas('members', function ($q) use ($userId) {
+            $q->where('id', $userId);
+        })->get();
+        foreach ($channels as $channel) {
+            foreach ($channel->members as $friend) {
+                if (array_search($friend->id, array_column($resp, 'id')) === false) {
+                    $data = new \stdClass();
+                    $data->id = $friend->id;
+                    $data->name = $friend->name;
+                    $data->avatar = $friend->passport ? route('fs.get.file', ['file' => $friend->passport->link]) : '';
 
-            $resp[] = $data;
+                    $resp[] = $data;
+                }
+            }
         }
-
-//        'id' => $friend->id,
-//            'name' => $friend->name,
-//            'avatar' => $friend->passport ? $friend->friend->passport->link : '' ];
 
         return response()->json($resp);
     }

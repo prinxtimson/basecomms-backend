@@ -22,6 +22,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $username
  * @property string $email
  * @property int $status
+ * @property int $adminVerified
  * @property string|null $email_verified_at
  * @property string $password
  * @property string|null $phoneNo
@@ -30,27 +31,39 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property string|null $deleted_on
+ * @property string|null $lastPwd
+ * @property string|null $lastPwdChange
+ * @property string|null $avatar
+ * @property string|null $contactEmail
  * @property-read mixed $is_admin
  * @property-read mixed $modules
  * @property-read mixed $name
  * @property-read mixed $privileges
+ * @property-read mixed $role
  * @property-read mixed $roles_model
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
- * @property-read FileStorage|null $passport
- * @property-read Collection|Roles[] $roles
+ * @property-read \Rainestech\AdminApi\Entity\FileStorage|null $passport
+ * @property-read Collection|\Rainestech\AdminApi\Entity\Roles[] $roles
  * @property-read int|null $roles_count
  * @method static \Illuminate\Database\Eloquent\Builder|Users newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Users newQuery()
  * @method static Builder|Users onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Users query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereAdminVerified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereContactEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereDeletedOn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereLastPwd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Users whereLastPwdChange($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users wherePassportID($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Users wherePhoneNo($value)
@@ -61,19 +74,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static Builder|Users withTrashed()
  * @method static Builder|Users withoutTrashed()
  * @mixin Eloquent
- * @property int $adminVerified
- * @property string|null $deleted_on
- * @property string|null $lastPwd
- * @property string|null $lastPwdChange
- * @property string|null $companyName
- * @property string|null $contactEmail
- * @method static \Illuminate\Database\Eloquent\Builder|Users whereAdminVerified($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Users whereCompanyName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Users whereContactEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Users whereDeletedOn($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Users whereLastPwd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Users whereLastPwdChange($value)
- * @property-read mixed $role
  */
 class Users extends Authenticatable implements JWTSubject
 {

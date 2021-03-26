@@ -1,46 +1,38 @@
 <?php
 
-
-namespace Rainestech\AdminApi\Requests;
-
+namespace Rainestech\Personnel\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Rainestech\AdminApi\Errors\FormValidationErrors;
 
-class StorageRequest extends FormRequest {
+class CalendarRequest extends FormRequest {
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules() {
+        $id = request('id');
 
         switch($this->method()) {
             case 'GET':
             case 'DELETE': {
                 return [];
             }
+            case 'PUT':
+            case 'PATCH':
             case 'POST': {
                 return [
-                    'id'    => 'integer|exists:file_storage,id',
+                    'id'  => 'integer|exists:profiles_calendar,id',
                     'name'  => 'required|between:3,250|string',
-                    'tag'  => 'required|string|between:3,100',
-                    'file'  => 'required',
+                    'description'  => 'required|string',
+                    'channel.id'  => 'integer|exists:profiles_channels,id',
+                    'calDate'  => 'date|required',
                 ];
             }
-            case 'PUT':
-            case 'PATCH': {
-                return [
-                    'id'    => 'integer|required|exists:file_storage,id',
-                    'name'  => 'required|between:3,100|string',
-                    'tag'  => 'required|string|between:3,100',
-                    'file'  => 'required',          ];
-            }
-            default:{
-                return [];
-                break;
-            }
+
+            default:break;
         }
     }
 

@@ -24,12 +24,9 @@ class CandidatesRequest extends FormRequest {
             case 'PATCH':
             case 'POST': {
                 return [
-                    'id'  => 'integer|exists:members_personnel,id',
+                    'id'  => 'integer|exists:profiles_candidates,id',
                     'description'  => 'required|between:3,250|string',
-                    'role'  => 'required|between:3,200|string',
-                    'address'  => 'required|between:3,200|string',
-                    'city'  => 'string|required|between:6,100',
-                    'country'  => 'string|required|between:6,100',
+                    'name' => 'required|between:0,250|string',
                     'user.id'  => 'integer|required|exists:admin_users,id',
                 ];
             }

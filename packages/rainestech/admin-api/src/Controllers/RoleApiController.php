@@ -39,7 +39,7 @@ class RoleApiController extends BaseApiController
             $role->privileges()->attach($p['id']);
         }
 
-        $role->refresh();
+        $role->loadWith();
         return response()->json($role);
     }
 
@@ -80,7 +80,7 @@ class RoleApiController extends BaseApiController
             $role->privileges()->attach($p['id']);
         }
 
-        // $role->privileges = $request->get('privileges');
-        return response()->json(Roles::with('privileges')->where('id', $role->id)->first());
+        $role->loadWith();
+        return response()->json($role);
     }
 }

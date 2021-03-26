@@ -26,6 +26,10 @@ class ChannelController extends BaseApiController
     }
 
     public function saveChannel(ChannelRequest $request) {
+        if (auth('api')->user()->role == 'CANDIDATES') {
+            return $this->jsonError(401, 'Unauthorized Operation');
+        }
+
         $channel = new Channels();
         $channel->fill($request->except(['leader', 'members']));
 
@@ -44,6 +48,10 @@ class ChannelController extends BaseApiController
     }
 
     public function editChannel(ChannelRequest $request) {
+        if (auth('api')->user()->role == 'CANDIDATES') {
+            return $this->jsonError(401, 'Unauthorized Operation');
+        }
+
         $channel = Channels::find($request->input('id'));
 
         if (!$channel) {

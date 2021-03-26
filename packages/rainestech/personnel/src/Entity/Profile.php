@@ -46,6 +46,18 @@ use Rainestech\AdminApi\Entity\Users;
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereViews($value)
  * @mixin \Eloquent
+ * @property string|null $title
+ * @property string|null $email
+ * @property string|null $avatar
+ * @property string|null $name
+ * @property int|null $bcId
+ * @property int|null $bcPage
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereBcId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereBcPage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereTitle($value)
  */
 class Profile extends BaseModel
 {
@@ -67,7 +79,7 @@ class Profile extends BaseModel
 
     public function channels()
     {
-        return $this->belongsToMany(Channels::class, 'profile_candidates_channels', 'channelId', 'candId');
+        return $this->belongsToMany(Channels::class, 'profiles_candidates_channels', 'channelId', 'candId');
     }
 
     public function getFileNoAttribute() {

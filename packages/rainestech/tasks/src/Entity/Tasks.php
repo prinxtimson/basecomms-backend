@@ -57,6 +57,12 @@ use Rainestech\Personnel\Entity\Channels;
  * @property-read \Illuminate\Database\Eloquent\Collection|Tasks[] $children
  * @property-read int|null $children_count
  * @method static \Illuminate\Database\Eloquent\Builder|Tasks wherePosition($value)
+ * @property string|null $taskNo
+ * @property string|null $tab
+ * @property-read int|null $assigned_to_count
+ * @property-read mixed $channel_name
+ * @method static \Illuminate\Database\Eloquent\Builder|Tasks whereTab($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tasks whereTaskNo($value)
  */
 class Tasks extends BaseModel
 {

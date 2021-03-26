@@ -5,6 +5,8 @@ namespace Rainestech\Tasks\Entity;
 use Rainestech\AdminApi\Entity\BaseModel;
 use Rainestech\AdminApi\Entity\FileStorage;
 use Rainestech\AdminApi\Entity\Users;
+use Rainestech\Personnel\Entity\Calendar;
+use Rainestech\Personnel\Entity\Channels;
 
 /**
  * Rainestech\Tasks\Entity\Comments
@@ -31,6 +33,13 @@ use Rainestech\AdminApi\Entity\Users;
  * @method static \Illuminate\Database\Eloquent\Builder|Comments whereTaskId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comments whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read mixed $passport
+ * @property int|null $channelId
+ * @property int|null $scheduleId
+ * @property-read Channels|null $channel
+ * @property-read Calendar $schedule
+ * @method static \Illuminate\Database\Eloquent\Builder|Comments whereChannelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comments whereScheduleId($value)
  */
 class Comments extends BaseModel
 {
@@ -54,6 +63,18 @@ class Comments extends BaseModel
     {
         return $this->belongsTo(Tasks::class, 'taskId');
     }
+
+    public function channel()
+    {
+        return $this->belongsTo(Channels::class, 'channelId');
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Calendar::class, 'schduleId');
+    }
+
+
 
     public function getPassportAttribute() {
         if ($this->user->passport) {

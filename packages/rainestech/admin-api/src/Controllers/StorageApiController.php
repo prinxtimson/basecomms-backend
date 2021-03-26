@@ -7,6 +7,7 @@ use Rainestech\AdminApi\Entity\FileStorage;
 use Rainestech\AdminApi\Entity\Users;
 use Rainestech\AdminApi\Requests\StorageRequest;
 use Rainestech\AdminApi\Utils\LocalStorage;
+use Rainestech\Personnel\Entity\Recruiters;
 
 class StorageApiController extends BaseApiController {
     use LocalStorage;
@@ -33,8 +34,8 @@ class StorageApiController extends BaseApiController {
     public function getFile($link) {
         if (!$fs = FileStorage::where('link', $link)->first())
             abort(404, 'File Not Found');
-        clock($fs->link);
-        clock(Storage::disk('app')->getVisibility($fs->tag . '/' . $fs->link));
+//        clock($fs->link);
+//        clock(Storage::disk('app')->getVisibility($fs->tag . '/' . $fs->link));
         $file = storage_path('app' . DIRECTORY_SEPARATOR . $fs->tag . DIRECTORY_SEPARATOR . $fs->link);
 
         $response = response()->file($file);

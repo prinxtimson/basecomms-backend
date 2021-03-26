@@ -29,9 +29,10 @@ class CommentRequest extends FormRequest
                 return [
                     'id'  => 'integer|exists:profiles_channels,id',
                     'task.id'  => 'integer|exists:tasks_tasks,id',
-                    'schedule.id'  => 'integer|exists:tasks_tasks,id',
+                    'schedule.id'  => 'integer|exists:profiles_calendar,id',
+                    'channel.id'  => 'integer|exists:profiles_channels,id',
                     'comment'  => 'required|string',
-                    'file.id'  => 'integer|exists:admin_users,id',
+                    'file.id'  => 'integer|exists:file_storage,id',
                 ];
             }
 

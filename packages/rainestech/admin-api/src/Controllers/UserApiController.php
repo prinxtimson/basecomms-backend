@@ -17,6 +17,7 @@ use Rainestech\AdminApi\Utils\LmsLogin;
 use Rainestech\AdminApi\Utils\Login;
 use Rainestech\AdminApi\Utils\Register;
 use Rainestech\AdminApi\Utils\Security;
+use Rainestech\Personnel\Entity\Profile;
 
 class UserApiController extends BaseApiController {
     use Login, Register, Security, ErrorResponse, LmsLogin;
@@ -53,6 +54,17 @@ class UserApiController extends BaseApiController {
                 return $this->sendFailedLoginResponse($request);
             }
             $user = auth('api')->user();
+
+            if ($candidate = Profile::where("email", $user->email)->orderBy('id', 'desc')->first()) {
+                if ($candidate->userId != $user->id) {
+                    $candidate->userId = $user->id;
+                    $candidate->update();
+
+                    $user->avatar = $candidate->avatar;
+                    $user->save();
+                }
+            }
+
             return $this->prepareLoginResponse($user);
         }
 
@@ -118,9 +130,6 @@ class UserApiController extends BaseApiController {
     }
 
     public function me() {
-//        @todo implement in middleware. set user base on token at that level
-//        $token = \request()->bearerToken();
-//        $dbToken =
         return response()->json(auth('api')->user());
     }
 
@@ -217,7 +226,6 @@ class UserApiController extends BaseApiController {
         $user = Users::find($request->get('id'));
         $user->firstName = $request->get('firstName');
         $user->lastName = $request->get('lastName');
-        $user->companyName = $request->get('companyName');
         $user->username = $request->get('username');
         $user->email = $request->get('email');
         $user->status = $request->get('status');
@@ -235,8 +243,9 @@ class UserApiController extends BaseApiController {
                 $user->roles()->detach($rol->id);
             }
 
-            $role = Roles::where('role', $request->input('role'))->first();
-            $user->roles()->attach($role->id);
+            foreach ($request->input('role') as $role) {
+                $user->roles()->attach($role['id']);
+            }
         }
 
         return response()->json($user);

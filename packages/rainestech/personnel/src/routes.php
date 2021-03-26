@@ -1,5 +1,6 @@
 <?php
 
+use Rainestech\Personnel\Controllers\CalendarController;
 use Rainestech\Personnel\Controllers\ChannelController;
 use Rainestech\Personnel\Controllers\ChatController;
 use Rainestech\Personnel\Controllers\CommentsController;
@@ -29,7 +30,15 @@ Route::group(['middleware' => 'admin.api', 'prefix' => 'channels'], function () 
     Route::delete('/remove/{id}', [ChannelController::class, 'delete'])->middleware('access:ROLE_CHANNELS')->name('channels.delete');
 });
 
+Route::group(['middleware' => 'admin.api', 'prefix' => 'calendar'], function () {
+    Route::get('/cid/{id}', [CalendarController::class, 'index'])->middleware('access:ROLE_CALENDAR')->name('calendar.index');
+    Route::post('/', [CalendarController::class, 'save'])->middleware('access:ROLE_CALENDAR')->name('calendar.save');
+    Route::put('/', [CalendarController::class, 'update'])->middleware('access:ROLE_CALENDAR')->name('calendar.edit');
+    Route::delete('/remove/{id}', [CalendarController::class, 'delete'])->middleware('access:ROLE_CALENDAR')->name('calendar.delete');
+});
+
 Route::group(['middleware' => 'admin.api', 'prefix' => 'comments'], function () {
     Route::post('/', [CommentsController::class, 'saveComments'])->middleware('access:ROLE_TASKS,ROLE_CALENDAR')->name('comments.save');
     Route::delete('/remove/{id}', [CommentsController::class, 'deleteComment'])->middleware('access:ROLE_TASKS,ROLE_CALENDAR')->name('comments.delete');
 });
+

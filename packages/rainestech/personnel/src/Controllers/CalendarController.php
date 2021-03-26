@@ -5,82 +5,45 @@ namespace Rainestech\Personnel\Controllers;
 
 
 use Rainestech\AdminApi\Controllers\BaseApiController;
+use Rainestech\Personnel\Entity\Calendar;
 use Rainestech\Personnel\Entity\Channels;
+use Rainestech\Personnel\Requests\CalendarRequest;
 use Rainestech\Personnel\Requests\ChannelRequest;
 
 class CalendarController extends BaseApiController
 {
-    public function index() {
-        return response()->json(Channels::where('parent', null)->orderby('id', 'desc')->get());
+    public function index($channelId) {
+        return response()->json(Calendar::where('channelId', $channelId)->get());
     }
 
-    public function getChannel($id) {
-        $channel = Channels::find($id);
+    public function save(CalendarRequest $request) {
+        $calendar = new Calendar($request->except(['id', 'channel']));
+        $calendar->channelId = $request->input('channel.id');
+        $calendar->save();
+        $calendar->load('channel');
 
-        if (!$channel) {
-            return $this->jsonError(404, 'Channel Not Found');
-        }
-
-        return response()->json($channel);
+        return response()->json($calendar);
     }
 
-    public function saveChannel(ChannelRequest $request) {
-        $channel = new Channels();
-        $channel->fill($request->except(['leader', 'members']));
-
-        if ($request->input('leader.id')) {
-            $channel->leaderId = $request->input('leader.id');
+    public function update(CalendarRequest $request) {
+        if (!$calendar = Calendar::find($request->input('id'))) {
+            return $this->jsonError(404, 'Resource not found!');
         }
 
-        foreach ($request->get('members') as $p) {
-            $channel->members()->attach($p['id']);
-        }
+        $calendar->fill($request->except(['id', 'calendar']));
+        $calendar->channelId = $request->input('channel.id');
+        $calendar->save();
 
-        $channel->refresh();
-        return response()->json($channel);
+        $calendar->load('channel');
+        return response()->json($calendar);
     }
 
-    public function editChannel(ChannelRequest $request) {
-        $channel = Channels::find($request->input('id'));
-
-        if (!$channel) {
-            return $this->jsonError(404, 'Channel not Found');
+    public function deleteCalendar($id) {
+        if (!$calendar = Calendar::find($id)) {
+            return $this->jsonError(404, 'Resource not found');
         }
 
-        $dbMembers = $channel->members;
-
-        $channel->fill($request->except(['leader', 'members', 'id']));
-
-        if ($request->input('leader.id')) {
-            $channel->leaderId = $request->input('leader.id');
-        }
-
-        foreach ($dbMembers as $m) {
-            $channel->members()->detach($m->id);
-        }
-
-        foreach ($request->get('members') as $p) {
-            $channel->members()->attach($p['id']);
-        }
-
-        $channel->refresh();
-        return response()->json($channel);
-    }
-
-    public function delete($id) {
-        $channel = Channels::find($id);
-
-        if (!$channel) {
-            return $this->jsonError(404, 'Channel not Found');
-        }
-
-        $dbMembers = $channel->members;
-
-        foreach ($dbMembers as $m) {
-            $channel->members()->detach($m->id);
-        }
-
-        $channel->delete();
+        $calendar->delete();
         return response()->json([]);
     }
 }

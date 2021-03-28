@@ -47,6 +47,10 @@ trait LmsLogin
                 $user->roles()->attach($role->id);
             }
 
+            if (!$user->status) {
+                return $this->jsonError(401, 'Subscription expired');
+            }
+
             return $this->prepareLoginResponse($user);
         }
 

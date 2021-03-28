@@ -39,21 +39,30 @@ class ChatController extends BaseApiController
     public function contacts() {
         $resp = [];
         $userId = auth('api')->id();
-        $channels = Channels::whereHas('members', function ($q) use ($userId) {
-            $q->where('id', $userId);
-        })->get();
-        foreach ($channels as $channel) {
-            foreach ($channel->members as $friend) {
-                if (array_search($friend->id, array_column($resp, 'id')) === false) {
-                    $data = new \stdClass();
-                    $data->id = $friend->id;
-                    $data->name = $friend->name;
-                    $data->avatar = $friend->passport ? route('fs.get.file', ['file' => $friend->passport->link]) : '';
+//        $channels = Channels::whereHas('members', function ($q) use ($userId) {
+//            $q->where('id', $userId);
+//        })->get();
+        foreach (Users::where('status', 1)->get() as $friend) {
+                $data = new \stdClass();
+                $data->id = $friend->id;
+                $data->name = $friend->name;
+                $data->avatar = $friend->passport ? route('fs.get.file', ['file' => $friend->passport->link]) : '';
 
-                    $resp[] = $data;
-                }
-            }
+                $resp[] = $data;
         }
+
+//        foreach ($channels as $channel) {
+//            foreach ($channel->members as $friend) {
+//                if (array_search($friend->id, array_column($resp, 'id')) === false) {
+//                    $data = new \stdClass();
+//                    $data->id = $friend->id;
+//                    $data->name = $friend->name;
+//                    $data->avatar = $friend->passport ? route('fs.get.file', ['file' => $friend->passport->link]) : '';
+//
+//                    $resp[] = $data;
+//                }
+//            }
+//        }
 
         return response()->json($resp);
     }

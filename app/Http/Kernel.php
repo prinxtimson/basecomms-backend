@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ForceSSL;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
@@ -25,6 +26,7 @@ class Kernel extends HttpKernel
         // \App\Http\Middleware\TrustHosts::class,
         TrustProxies::class,
         HandleCors::class,
+        ForceSSL::class,
         PreventRequestsDuringMaintenance::class,
         ValidatePostSize::class,
         TrimStrings::class,

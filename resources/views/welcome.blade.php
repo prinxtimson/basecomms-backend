@@ -28,11 +28,12 @@
     <meta content="/assets/ms-icon-144x144.png" name="msapplication-TileImage">
     <meta content="#ffffff" name="theme-color">
     <title>TriComms</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="/styles.47220a918f040c21fd3f.css"></head>
 <body>
 <app-root></app-root>
-<script src="/runtime.c0b0f2b7fcfb5043554e.js" defer></script>
+<script src="/runtime.515ff40d39ec97231404.js" defer></script>
 <script src="/polyfills-es5.649e968043c22090f7cf.js" nomodule defer></script>
 <script src="/polyfills.51ce7af1f4bfe1a64f58.js" defer></script>
-<script src="/main.d1c3972084c3780a8871.js" defer></script></body>
+<script src="/main.223a3b64337b0cc96117.js" defer></script></body>
 </html>

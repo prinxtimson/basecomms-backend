@@ -46,9 +46,10 @@ class ChatController extends BaseApiController
                 $data = new \stdClass();
                 $data->id = $friend->id;
                 $data->name = $friend->name;
-                $data->avatar = $friend->passport ? route('fs.get.file', ['file' => $friend->passport->link]) : '';
+                $data->avatar = ($friend->passport ? route('fs.get.file', ['file' => $friend->passport->link]) : $friend->avatar ) ? $friend->avatar : '';
 
                 $resp[] = $data;
+
         }
 
 //        foreach ($channels as $channel) {

@@ -66,6 +66,7 @@ trait Login
         if ($token = auth('api')->attempt(
             $this->credentialsEmail($request))) {
 
+            $this->token = $token;
            return true;
         }
 

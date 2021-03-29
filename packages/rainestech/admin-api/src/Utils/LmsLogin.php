@@ -43,6 +43,7 @@ trait LmsLogin
             $this->linkCandidateProfile($user);
 
             $this->token = auth('api')->login($user);
+
             if($role = Roles::find(4)) {
                 $user->roles()->attach($role->id);
             }
@@ -82,6 +83,8 @@ trait LmsLogin
         if (!$token) {
             $token = new Tokens();
         }
+
+        clock($this->token);
 
         $token->ip = $this->getIp();
         $token->device = $this->getDeviceDetails();

@@ -15,13 +15,13 @@ class ProfileController extends BaseApiController {
     public function getMyProfile() {
         $user = auth('api')->user();
 
-        if (!$p = Profile::with('docs', 'channels', 'user')->where('userId', auth('api')->id())->first()) {
+        if (!$p = Profile::with('docs', 'user')->where('userId', auth('api')->id())->first()) {
             if (!$p = Profile::where('email', $user->email)->orderBy('id', 'desc')->first()) {
                 abort(404, 'Profile Record Not Found!');
             } else {
                 $p->userId = $user->id;
                 $p->save();
-                $p->loadWith(['docs', 'channels', 'user']);
+                $p->loadWith(['docs', 'user']);
 
                 if ($user->avatar) {
                     $user->avatar = $p->avatar;

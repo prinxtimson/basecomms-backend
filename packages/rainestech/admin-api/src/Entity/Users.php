@@ -11,6 +11,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Rainestech\Personnel\Entity\Channels;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
@@ -117,6 +118,11 @@ class Users extends Authenticatable implements JWTSubject
 
     public function roles() {
         return $this->belongsToMany(Roles::class, 'admin_user_role', 'user_id', 'role_id');
+    }
+
+    public function channels()
+    {
+        return $this->belongsToMany(Channels::class, 'profiles_candidates_channels', 'channelId', 'userId');
     }
 
     public function getPrivilegesAttribute() {

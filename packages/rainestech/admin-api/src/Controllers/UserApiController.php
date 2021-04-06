@@ -66,7 +66,7 @@ class UserApiController extends BaseApiController {
             }
 
             if (!$user->status) {
-                return $this->jsonError(401, 'Account Not Activated! Please renew your subscription or contact Admin');
+                return response()->json( 'Account Not Activated! Please renew your subscription or contact Admin', 401);
             }
 
             return $this->prepareLoginResponse($user);

@@ -65,7 +65,7 @@ class Profile extends BaseModel
     protected $guarded = ['id'];
     protected $dateFormat = 'Y-m-d h:m:s';
     protected $with = ['user'];
-    protected $appends = ['fileNo', 'projectNo'];
+    protected $appends = ['fileNo', 'projectNo', 'channels'];
 
     public function user()
     {
@@ -77,17 +77,16 @@ class Profile extends BaseModel
         return $this->belongsToMany(FileStorage::class, 'profiles_candidates_files', 'fId', 'cId');
     }
 
-    public function channels()
-    {
-        return $this->belongsToMany(Channels::class, 'profiles_candidates_channels', 'channelId', 'candId');
-    }
-
     public function getFileNoAttribute() {
         return $this->docs->count();
     }
 
     public function getProjectNoAttribute() {
-        return $this->channels->count();
+        return $this->user->channels->count();
+    }
+
+    public function getChannelsAttribute() {
+        return $this->user->channels;
     }
 
 }

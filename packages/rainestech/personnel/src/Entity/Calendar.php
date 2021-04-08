@@ -61,6 +61,11 @@ class Calendar extends BaseModel
         return $this->belongsTo(Channels::class, 'channelId');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(Users::class, 'editor');
+    }
+
     public function comments() {
         return $this->hasMany(Comments::class, 'scheduleId');
     }

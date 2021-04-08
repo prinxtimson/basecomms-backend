@@ -5,6 +5,8 @@ namespace Rainestech\Tasks\Controllers;
 use Carbon\Carbon;
 use Rainestech\AdminApi\Controllers\BaseApiController;
 use Rainestech\AdminApi\Entity\FileStorage;
+use Rainestech\AdminApi\Entity\Users;
+use Rainestech\AdminApi\Utils\EmailNotifications;
 use Rainestech\AdminApi\Utils\LocalStorage;
 use Rainestech\Tasks\Entity\Tasks;
 use Rainestech\Tasks\Requests\TaskFilesRequest;
@@ -35,13 +37,27 @@ class TaskController extends BaseApiController {
             }
         }
 
+        $mails = [];
         if ($request->has('assignedTo')) {
             foreach ($request->input('assignedTo') as $a) {
                 $task->assignedTo()->attach($a['id']);
+
+                if ($temp = Users::find($a['id'])) {
+                    $mails[$temp->email] = $temp->name;
+                }
             }
         }
 
         $task->refresh();
+
+//        foreach ($task->channels->members as $m) {
+//            $mails[$m->email] = $m->name;
+//        }
+
+        if (count($mails) > 0) {
+            $email = new EmailNotifications();
+            $email->assignedTask($mails);
+        }
         return response()->json($task);
     }
 
@@ -60,13 +76,21 @@ class TaskController extends BaseApiController {
 
         $task->save();
 
+        $mails = [];
         if ($request->has('assignedTo')) {
+            $tempTask = $task->assignedTo;
+
             foreach ($task->assignedTo as $u) {
                 $task->assignedTo()->detach($u->id);
             }
 
             foreach ($request->input('assignedTo') as $a) {
                 $task->assignedTo()->attach($a['id']);
+
+                if (!$temp = $tempTask->find($a['id'])) {
+                    $temp = Users::find($a['id']);
+                    $mails[$temp->email] = $temp->name;
+                }
             }
         }
 

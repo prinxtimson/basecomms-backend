@@ -73,7 +73,7 @@ Route::group(['middleware' => 'admin.api'], function () {
     Route::get('/v1/navItems/{app}', [NavController::class, 'index'])->name('nav.items');
 
     // Notifications
-    Route::group(['prefix' => 'v1/notifications', 'middleware' => 'access:ROLE_NOTIFICATIONS'], function () {
+    Route::group(['prefix' => 'v1/notifications'], function () {
         Route::get('/mail', [NotificationTemplateController::class, 'mailIndex'])->name('notifications.mail.index');
         Route::get('/sms', [NotificationTemplateController::class, 'smsIndex'])->name('notifications.sms.index');
         Route::post('/mail', [NotificationTemplateController::class, 'saveMailTemplate'])->name('notifications.mail.save');

@@ -4,9 +4,11 @@ use Rainestech\Personnel\Controllers\CalendarController;
 use Rainestech\Personnel\Controllers\ChannelController;
 use Rainestech\Personnel\Controllers\ChatController;
 use Rainestech\Personnel\Controllers\CommentsController;
+use Rainestech\Personnel\Controllers\DashboardController;
 use Rainestech\Personnel\Controllers\ProfileController;
 
 Route::group(['middleware' => 'admin.api', 'prefix' => 'profile'], function () {
+    Route::get('/dashboard', [DashboardController::class, 'getDashboard'])->name('dashbaord');
     Route::get('/', [ProfileController::class, 'getMyProfile'])->middleware('access:ROLE_PROFILE')->name('profile.my');
     Route::get('/candidates', [ProfileController::class, 'candidates'])->name('candidates.index');
     Route::get('/cid/{id}', [ProfileController::class, 'getCandidatesByUserID'])->name('candidate.user.id');

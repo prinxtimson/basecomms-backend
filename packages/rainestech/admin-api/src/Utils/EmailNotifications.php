@@ -10,7 +10,7 @@ class EmailNotifications
 {
     public function sendOTP(Users $user, $tokens, $subject)
     {
-        $name = $user->firstName == $user->lastName ? $user->firstName : $user->lastName . ' ' . $user->firstName;
+        $name = $user->name;
         $temp = MailTemplates::where('name', 'OTP')->first();
         if ($temp) {
             $message = $temp->template;
@@ -19,6 +19,24 @@ class EmailNotifications
             Mail::send('email', ['template' => $messa], function ($mail) use ($temp, $user, $subject, $name) {
                 $mail->to($user->email, $name);
                 $mail->subject($subject);
+            });
+        }
+
+        return $this;
+    }
+
+
+    public function welcome(Users $user, $password)
+    {
+        $name = $user->name;
+        $temp = MailTemplates::where('name', 'welcome')->first();
+        if ($temp) {
+            $message = $temp->template;
+            $messag = str_replace('{{username}}', strtoupper($name), $message);
+            $messa = str_replace('{{password}}', $password, $messag);
+            Mail::send('email', ['template' => $messa], function ($mail) use ($temp, $user, $name) {
+                $mail->to($user->email, $name);
+                $mail->subject('Welcome to Tricomms | Tritek Consulting');
             });
         }
 
@@ -39,15 +57,56 @@ class EmailNotifications
         return $this;
     }
 
-    public function sendWelcome(Users $user)
+    public function addedToChannel($emails)
     {
-        $temp = MailTemplates::where('name', 'welcome')->first();
+        $temp = MailTemplates::where('name', 'channel_add')->first();
         if ($temp) {
             $message = $temp->template;
-            $msg = str_replace('{{username}}', strtoupper($user->user_nicename), $message);
-            Mail::send('email', ['template' => $msg], function ($mail) use ($temp, $user) {
-                $mail->to($user->user_email, $user->user_nicename);
-                $mail->subject('Welcome to Tritek Consulting');
+            Mail::send('email', ['template' => $message], function ($mail) use ($temp, $emails) {
+                $mail->to($emails);
+                $mail->subject('You have Added to a new Channel | Tricomms');
+            });
+        }
+
+        return $this;
+    }
+
+    public function assignedTask($emails)
+    {
+        $temp = MailTemplates::where('name', 'task_assigned')->first();
+        if ($temp) {
+            $message = $temp->template;
+            Mail::send('email', ['template' => $message], function ($mail) use ($temp, $emails) {
+                $mail->to($emails);
+                $mail->subject('You have a new Task | Tricomms');
+            });
+        }
+
+        return $this;
+    }
+
+    public function newTask($emails)
+    {
+        $temp = MailTemplates::where('name', 'task_new')->first();
+        if ($temp) {
+            $message = $temp->template;
+            Mail::send('email', ['template' => $message], function ($mail) use ($temp, $emails) {
+                $mail->to($emails);
+                $mail->subject('New Task Added to Your Channel | Tricomms');
+            });
+        }
+
+        return $this;
+    }
+
+    public function newSchedule($emails)
+    {
+        $temp = MailTemplates::where('name', 'task_assigned')->first();
+        if ($temp) {
+            $message = $temp->template;
+            Mail::send('email', ['template' => $message], function ($mail) use ($temp, $emails) {
+                $mail->to($emails);
+                $mail->subject('You have a new Schedule | Tricomms');
             });
         }
 
@@ -62,7 +121,7 @@ class EmailNotifications
             $msg = str_replace('{{username}}', strtoupper($user->user_nicename), $message);
             Mail::send('email', ['template' => $msg], function ($mail) use ($temp, $user) {
                 $mail->to($user->user_email, $user->user_nicename);
-                $mail->subject('Tritek Careers Password Change');
+                $mail->subject('Tricomms Password Change');
             });
         }
 

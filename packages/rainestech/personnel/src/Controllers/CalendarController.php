@@ -5,6 +5,7 @@ namespace Rainestech\Personnel\Controllers;
 
 
 use Rainestech\AdminApi\Controllers\BaseApiController;
+use Rainestech\AdminApi\Utils\EmailNotifications;
 use Rainestech\Personnel\Entity\Calendar;
 use Rainestech\Personnel\Entity\Channels;
 use Rainestech\Personnel\Requests\CalendarRequest;
@@ -21,6 +22,16 @@ class CalendarController extends BaseApiController
         $calendar->channelId = $request->input('channel.id');
         $calendar->save();
         $calendar->load('channel');
+
+        $mails = [];
+        foreach ($calendar->channel->members as $m) {
+            $mails[$m->email] = $m->name;
+        }
+
+        if (count($mails) > 0) {
+            $email = new EmailNotifications();
+            $email->newSchedule($mails);
+        }
 
         return response()->json($calendar);
     }

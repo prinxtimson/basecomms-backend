@@ -39,6 +39,8 @@ trait Register {
         }
 
         if ($response = $this->registered($request, $user)) {
+            $mail = new EmailNotifications();
+            $mail->welcome($user, $request->input('password'));
             return $response;
         }
 
@@ -68,13 +70,13 @@ trait Register {
             return $response;
         }
 
-        $recruiters = new Recruiters($request->except(['logo', 'username', 'password']));
-        $recruiters->userId = $request->input('user.id');
-        $recruiters->fsId = $request->input('logo.id');
-        $recruiters->save();
+//        $recruiters = new Recruiters($request->except(['logo', 'username', 'password']));
+//        $recruiters->userId = $request->input('user.id');
+//        $recruiters->fsId = $request->input('logo.id');
+//        $recruiters->save();
 
-        $user->passportID = $request->input('logo.id');
-        $user->update();
+//        $user->passportID = $request->input('logo.id');
+//        $user->update();
 
         return new Response('', 201);
     }

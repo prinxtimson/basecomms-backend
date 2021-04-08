@@ -113,7 +113,11 @@ class Tasks extends BaseModel
     }
 
     public function getChannelNameAttribute() {
-        return $this->channels->name;
+        if ($this->channels) {
+            return $this->channels->name;
+        }
+
+        return "";
     }
 
     public function getProjectNoAttribute() {

@@ -6,6 +6,8 @@ namespace Rainestech\Personnel\Controllers;
 
 use App\Models\User;
 use Rainestech\AdminApi\Controllers\BaseApiController;
+use Rainestech\AdminApi\Entity\Users;
+use Rainestech\AdminApi\Utils\EmailNotifications;
 use Rainestech\Personnel\Entity\Channels;
 use Rainestech\Personnel\Requests\ChannelRequest;
 
@@ -39,9 +41,14 @@ class ChannelController extends BaseApiController
 
         $channel->save();
 
+        $mails = [];
         foreach ($request->get('members') as $p) {
             $channel->members()->attach($p['id']);
+            $mails[$p->email] = $p->name;
         }
+
+        $email = new EmailNotifications();
+        $email->addedToChannel($mails);
 
         $channel->refresh();
         return response()->json($channel);
@@ -71,8 +78,19 @@ class ChannelController extends BaseApiController
             $channel->members()->detach($m->id);
         }
 
+        $mails = [];
         foreach ($request->get('members') as $p) {
             $channel->members()->attach($p['id']);
+
+            if (!$temp = $dbMembers->find($p['id'])) {
+                $temp = Users::find($p['id']);
+                $mails[$temp->email] = $temp->name;
+            }
+        }
+
+        if (count($mails) > 0) {
+            $email = new EmailNotifications();
+            $email->addedToChannel($mails);
         }
 
         $channel->refresh();

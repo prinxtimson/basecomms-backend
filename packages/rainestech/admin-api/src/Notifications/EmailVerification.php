@@ -34,7 +34,7 @@ class EmailVerification
         $user->lastPwd = $this->generatePin();
         $user->save();
 
-        $temp = MailTemplates::where('name', 'Email Verification')->first();
+        $temp = MailTemplates::where('name', 'password_reset')->first();
         if ($temp) {
             $message = $temp->template;
             $messag = str_replace('{{username}}', strtoupper($user->username), $message);

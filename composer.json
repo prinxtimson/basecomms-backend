@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
+        "atymic/twitter": "^3.1",
         "fideloper/proxy": "^4.4",
         "firebase/php-jwt": "^5.2",
         "fruitcake/laravel-cors": "^2.0",
@@ -17,6 +18,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "itsgoingd/clockwork": "^5.0",
         "jenssegers/agent": "^2.6",
+        "laravel-notification-channels/webpush": "^5.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "mikemclin/laravel-wp-password": "^2.0",

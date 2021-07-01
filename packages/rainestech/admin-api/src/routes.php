@@ -9,9 +9,11 @@
 
 use Rainestech\AdminApi\Controllers\ContactController;
 use Rainestech\AdminApi\Controllers\DocumentApiController;
+use Rainestech\AdminApi\Controllers\LmsController;
 use Rainestech\AdminApi\Controllers\NavController;
 use Rainestech\AdminApi\Controllers\NotificationTemplateController;
 use Rainestech\AdminApi\Controllers\RoleApiController;
+use Rainestech\AdminApi\Controllers\SendMailController;
 use Rainestech\AdminApi\Controllers\StorageApiController;
 use Rainestech\AdminApi\Controllers\UserApiController;
 
@@ -42,6 +44,7 @@ Route::group(['prefix' => 'contact'], function () {
 
 Route::group(['middleware' => 'admin.api'], function () {
     Route::get('/users', [UserApiController::class, 'index'])->name('users');
+    Route::get('/lms', [LmsController::class, 'getUsers'])->name('lms.users'); // new
     Route::get('/users/s/{username}/{type}', [UserApiController::class, 'search'])->name('users.search');
     Route::get('/users/me', [UserApiController::class, 'me'])->name('users.me');
     Route::get('/users/logout', [UserApiController::class, 'logout'])->name('logout');
@@ -82,6 +85,14 @@ Route::group(['middleware' => 'admin.api'], function () {
         Route::put('/sms', [NotificationTemplateController::class, 'editSmsTemplate'])->name('notifications.sms.edit');
         Route::delete('/sms/rem/{id}', [NotificationTemplateController::class, 'deleteSmsTemp'])->name('notifications.sms.delete');
         Route::delete('/mail/rem/{id}', [NotificationTemplateController::class, 'deleteMailTemp'])->name('notifications.mail.delete');
+    });
+
+    // Notifications
+    Route::group(['prefix' => 'v1/emails'], function () {
+        Route::get('/', [SendMailController::class, 'index'])->name('send.mail.index');
+        Route::post('/', [SendMailController::class, 'saveMail'])->name('send.mail.save');
+        Route::put('/', [SendMailController::class, 'editMail'])->name('send.mail.edit');
+        Route::delete('/rem/{id}', [SendMailController::class, 'deleteMail'])->name('send.mail.delete');
     });
 
     // Documents

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
+use Rainestech\AdminApi\Controllers\SendMailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +19,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/ping', [Controller::class, 'testPing'])->name('ping');
+Route::get('/trkem/{id}', [SendMailController::class, 'track.email'])->name('track');

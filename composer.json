@@ -22,10 +22,10 @@
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "mikemclin/laravel-wp-password": "^2.0",
-        "rainestech/admin-api": "dev-main",
-        "rainestech/authorization": "dev-main",
-        "rainestech/personnel": "dev-main",
-        "rainestech/tasks": "dev-main",
+        "rainestech/admin-api": "dev-master",
+        "rainestech/authorization": "dev-master",
+        "rainestech/personnel": "dev-master",
+        "rainestech/tasks": "dev-master",
         "rbdwllr/reallysimplejwt": "^4.0"
     },
     "require-dev": {
@@ -107,5 +107,4 @@
             }
         }
     ]
-
 }

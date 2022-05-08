@@ -29,6 +29,8 @@ class CalendarRequest extends FormRequest {
                     'description'  => 'required|string',
                     'channel.id'  => 'integer|exists:profiles_channels,id',
                     'calDate'  => 'date|required',
+                    'startTime' => 'required|string',
+                    'endTime' => 'required|string',
                 ];
             }
 
